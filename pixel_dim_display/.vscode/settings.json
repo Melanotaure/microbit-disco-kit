@@ -1,0 +1,9 @@
+{
+    "cmake.ignoreCMakeListsMissing": true,
+    "cmake.configureOnOpen": false,
+    "cmake.enableAutomaticKitScan": false,
+    "cmake.sourceDirectory": "${workspaceFolder}/nonexistent",
+    "rust-analyzer.check.allTargets": false,
+    "rust-analyzer.cargo.target": "thumbv7em-none-eabihf",
+    "editor.formatOnSave": true
+}

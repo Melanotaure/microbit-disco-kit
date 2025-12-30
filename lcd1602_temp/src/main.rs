@@ -87,7 +87,7 @@ async fn display_task(i2c: Twim<'static>) {
             Some(v) => v,
             None => value,
         };
-        lcd_println!(controller, line = 1, "temp: {value}")
+        lcd_println!(controller, line = 1, ">temp:{value}")
             .await
             .unwrap();
         Timer::after_millis(500).await;

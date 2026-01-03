@@ -9,7 +9,10 @@ use defmt_rtt as _; // global logger
 use panic_halt as _;
 
 use embassy_executor::Spawner;
-use embassy_futures::join::join;
+use embassy_futures::{
+    join::join,
+    select::{Either, select},
+};
 use embassy_nrf::{
     Peri, bind_interrupts,
     gpio::{AnyPin, Input, Level, Output, OutputDrive, Pull},
@@ -106,25 +109,26 @@ async fn display_task(i2c: Twim<'static>) {
 
     controller.clear().await.unwrap();
 
-    let mut value = 0;
-    let mut distance = 0.0;
+    let mut last_temp = 0;
+    let mut last_dist = 0.0;
+
     loop {
-        value = match SIGNAL.try_take() {
-            Some(v) => v,
-            None => value,
-        };
-        lcd_println!(controller, line = 0, "temp: {value} ")
+        match select(SIGNAL.wait(), DISTANCE_SIGNAL.wait()).await {
+            Either::First(temp) => {
+                last_temp = temp;
+            }
+            Either::Second(dist) => {
+                last_dist = dist;
+            }
+        }
+
+        lcd_println!(controller, line = 0, "temp: {last_temp} ")
             .await
             .unwrap();
 
-        distance = match DISTANCE_SIGNAL.try_take() {
-            Some(v) => v,
-            None => distance,
-        };
-        lcd_println!(controller, line = 1, "dist: {:.2}  ", distance)
+        lcd_println!(controller, line = 1, "dist: {:.2} cm  ", last_dist)
             .await
             .unwrap();
-        Timer::after_millis(500).await;
     }
 }
 

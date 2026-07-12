@@ -53,8 +53,8 @@ async fn main(spawner: Spawner) {
     pwm1.set_max_duty(255);
 
     // --- 4. Display task launch ---
-    spawner.spawn(led_matrix_task(pwm0, pwm1, rows)).unwrap();
-    spawner.spawn(animation_task()).unwrap();
+    spawner.spawn(led_matrix_task(pwm0, pwm1, rows).expect("spawn error"));
+    spawner.spawn(animation_task().expect("spawn error"));
 
     // Your code can continue here asynchronously
     loop {

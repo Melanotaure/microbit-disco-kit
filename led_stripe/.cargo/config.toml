@@ -1,0 +1,19 @@
+[target.'cfg(all(target_arch = "arm", target_os = "none"))']
+runner = [
+    "probe-rs",
+    "run",
+    "--chip",
+    "nRF52833_xxAA",
+    "--log-format",
+    "{t} {L} {s}",
+]
+
+rustflags = ["-C", "link-arg=-Tlink.x", "-C", "link_arg=-Tdefmt.x"]
+
+[build]
+target = "thumbv7em-none-eabihf"
+
+[env]
+# default = "error"; other options: trace, debug, warn or off
+# to set by module: "warn,{crate}::{mode}=trace"
+DEFMT_LOG = "debug"

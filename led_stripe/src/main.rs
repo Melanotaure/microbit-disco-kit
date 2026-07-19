@@ -26,7 +26,7 @@ async fn main(_spawner: Spawner) {
     // Prepare a buffer for the 60 LEDs
     let mut colors = [RGB8::new(0, 0, 0); 60];
 
-    info!("Let' display a rainbow!");
+    info!("Let's display a rainbow!");
     for (i, color) in colors.iter_mut().enumerate() {
         let hue = ((i * 255) / 60) as u8;
         let hsv = Hsv {

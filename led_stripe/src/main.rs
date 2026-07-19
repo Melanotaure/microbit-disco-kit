@@ -23,10 +23,9 @@ async fn main(_spawner: Spawner) {
     let buffer: &'static mut [u16; 1440] = BUFFER_CELL.init([0; 1440]);
     let mut led_strip: Ws2812<1440> = Ws2812::new(p.PWM0, p.P0_02, buffer);
 
-    // Préparer un buffer pour tes 60 LEDs
+    // Prepare a buffer for the 60 LEDs
     let mut colors = [RGB8::new(0, 0, 0); 60];
 
-    // Allumer la première LED en bleu
     info!("Let' display a rainbow!");
     for (i, color) in colors.iter_mut().enumerate() {
         let hue = ((i * 255) / 60) as u8;
@@ -36,7 +35,7 @@ async fn main(_spawner: Spawner) {
             val: 128, // Brightness (val)
         };
 
-        // hsv2rgb effectue la conversion en RGB8
+        // hsv2rgb does the conversion in RGB8
         *color = hsv2rgb(hsv);
     }
     // Non blocking flush via DMA

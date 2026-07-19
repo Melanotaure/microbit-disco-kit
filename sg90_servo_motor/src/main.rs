@@ -13,40 +13,36 @@ use crate::sg90_servo_motor::Servo;
 
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) {
-    // Initialisation des périphériques du nRF52833
+    // Initialisation of the nRF52833 peripherics
     let p = embassy_nrf::init(Default::default());
 
-    // 1. Configuration de la PWM
+    // PWM Configuration
     let mut pwm_config = SimpleConfig::default();
 
-    // Le système tourne à 16 MHz. Un diviseur de 16 nous donne une base
-    // de temps de 1 MHz. Ainsi, 1 "tick" matériel = 1 microseconde (µs).
+    // The system runs at 16 MHz. A 16 division gives us a time base
+    // of 1 MHz. So, 1 "tick" = 1 microsecond (µs).
     pwm_config.prescaler = Prescaler::Div16;
 
-    // Pour une période de 20 ms, il nous faut 20 000 ticks de 1 µs.
+    // For a period of 20 ms, we need 20 000 ticks of 1 µs.
     pwm_config.max_duty = 20_000;
 
-    // 2. Déploiement du driver
-    // On instancie un PWM sur un seul canal. Le "Pad 0" du micro:bit v2
-    // correspond physiquement à la broche P0.02.
-    // L'API exige la référence à la configuration (&pwm_config).
+    // Instanciation of a PWM on only one channel. The "Pad 0" of the micro:bit v2
+    // physicly corresponds to the pin P0.02.
     let pwm = SimplePwm::new_1ch(p.PWM0, p.P0_02, &pwm_config);
     let mut servo = Servo::new(pwm);
 
     loop {
-        // 3. Pilotage du servo (Canal 0)
-
-        // Position 0° : impulsion de 1 ms = 500 µs
+        // Angle 0° : 1 ms = 500 µs pulse
         servo.set_angle(0);
         // servo.set_duty(500);
         Timer::after_millis(1000).await;
 
-        // Position 90° (centre) : impulsion de 1.5 ms = 1500 µs
+        // Angle 90° (center) : 1.5 ms = 1500 µs pulse
         servo.set_angle(90);
         // servo.set_duty(1500);
         Timer::after_millis(1000).await;
 
-        // Position 180° : impulsion de 2 ms = 2500 µs
+        // Angle 180° : 2 ms = 2500 µs pulse
         servo.set_angle(180);
         // servo.set_duty(2500);
         Timer::after_millis(1000).await;

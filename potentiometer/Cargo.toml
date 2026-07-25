@@ -1,0 +1,29 @@
+[package]
+name = "potentiometer"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+cortex-m = { version = "0.7.7", features = ["critical-section-single-core"] }
+cortex-m-rt = "0.7.5"
+defmt = "1.0.1"
+defmt-rtt = "1.1.0"
+embassy-futures = { version = "0.1.2", features = ["defmt"] }
+embassy-time = { version = "0.5.0", features = [
+    "defmt",
+    "defmt-timestamp-uptime",
+] }
+embassy-nrf = { version = "0.11.0", features = [
+    "nrf52833",
+    "time-driver-rtc1",
+    "gpiote",
+] }
+embassy-sync = { version = "0.8.0", features = ["defmt"] }
+panic-probe = { version = "1.0.0", features = ["defmt", "print-defmt"] }
+embassy-executor = { version = "0.10.0", features = [
+    "platform-cortex-m",
+    "defmt",
+    "executor-interrupt",
+    "executor-thread",
+] }
+itoa = "1.0.18"
